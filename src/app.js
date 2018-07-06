@@ -3,19 +3,11 @@ const uid = require('uid');
 const $ = require('jquery');
 const openStream = require('./openStream');
 const playVideo = require('./playVideo');
-const getIceObject = require('./getIceObject');
 
-getIceObject(iceConfig => {
-    const connectionObj = {
-        host: 'stream0407.herokuapp.com',
-        port: 443,
-        secure: true,
-        key: 'peerjs',
-        config: iceConfig
-    };
-
-    const peer = new Peer({
-  		config: {'iceServers': [
+    const peer = new Peer(
+    	getPeer, 
+    	{
+    		config: {'iceServers': [
 	    	{ url: 'stun:stun.l.google.com:19302' },
 	    	{ url: 'turn:homeo@turn.bistri.com:80', credential: 'homeo' }
   		]} 
@@ -38,8 +30,6 @@ getIceObject(iceConfig => {
             call.on('stream', remoteStream => playVideo(remoteStream, 'friendStream'));
         });
     });
-
-});
 
 function getPeer() {
     const id = uid(10);
